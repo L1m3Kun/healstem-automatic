@@ -1,5 +1,6 @@
 import { cn } from "@/utilities";
-import { MouseEvent, memo, useCallback, useState } from "react";
+import { memo, type MouseEvent } from "react";
+import { CircleCheck, Delete } from "lucide-react";
 
 const ButtonItems = [
   { contents: 1, id: 1, value: 1 },
@@ -11,9 +12,9 @@ const ButtonItems = [
   { contents: 7, id: 7, value: 7 },
   { contents: 8, id: 8, value: 8 },
   { contents: 9, id: 9, value: 9 },
-  { contents: "<", id: "back-space", value: "bs" },
+  { contents: <Delete size={40} />, id: "back-space", value: "bs" },
   { contents: 0, id: 0, value: 0 },
-  { contents: ">", id: "confirm", value: "cf" },
+  { contents: <CircleCheck size={40} />, id: "confirm", value: "cf" },
 ];
 
 interface ButtonPanelProps {
@@ -31,7 +32,7 @@ const ButtonPanel = ({ handleButtonClick }: ButtonPanelProps) => {
           key={id}
           data-value={value}
           className={cn(
-            "btn btn-numbers self-center justify-self-center h-15",
+            "btn btn-numbers self-center justify-self-center h-15 flex-center",
             typeof id !== "number" && "bg-accent"
           )}
         >
