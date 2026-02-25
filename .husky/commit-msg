@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+msg_file="$1"
+first_line="$(sed -n '1p' "$msg_file")"
+
+# Allow Git-generated merge commits.
+echo "$first_line" | grep -Eq '^Merge ' && exit 0
+
+# Allow autosquash commits by validating the original message part.
+echo "$first_line" | grep -Eq '^(fixup!|squash!) ' && first_line="${first_line#*! }"
+
+pattern='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9._/-]+\))?(!)?: .+'
+
+if echo "$first_line" | grep -Eq "$pattern"; then
+  exit 0
+fi
+
+echo "Invalid commit message format."
+echo "Use: type(scope): subject"
+echo "Example: feat(auth): add login rate limiter"
+echo "Allowed types: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
+exit 1
