@@ -6,4 +6,6 @@ if [ -z "$staged_files" ]; then
 fi
 
 echo "Linting staged files..."
-npm run lint -- $staged_files
+pnpm run lint -- $staged_files
+echo "test staged files..."
+pnpm vitest
