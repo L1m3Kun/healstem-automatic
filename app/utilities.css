@@ -39,3 +39,12 @@
   background-color: var(--color-secondary);
   border-radius: 20px;
 }
+
+@utility no-scrollbar-scroll {
+  overflow: scroll;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

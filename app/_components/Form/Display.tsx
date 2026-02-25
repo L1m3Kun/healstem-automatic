@@ -8,7 +8,7 @@ interface DisplayProps {
 const Display = ({ lastPhone }: DisplayProps) => {
   return (
     <div>
-      <div className="max-w-83 h-full w-full min-h-14 bg-white rounded-xl text-4xl tracking-[20%] text-center text-text py-2 overflow-scroll">
+      <div className="max-w-83 h-full w-full min-h-14 bg-white rounded-xl text-4xl tracking-[20%] text-center text-text py-2 no-scrollbar-scroll">
         {lastPhone}
       </div>
       {/* @TODO : 에러 변수 생성 및 에러 문구 처리 */}
