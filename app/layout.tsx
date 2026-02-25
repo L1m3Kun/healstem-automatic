@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Image from "next/image";
+import Bg from "@/assets/imgs/background-img.jpg";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +22,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={FontJalnan.className}>{children}</body>
+      <body className={`${FontJalnan.className} h-full`}>
+        {children}
+        <div className="fixed inset-0 -z-40">
+          <Image
+            alt="사우나 배경"
+            src={Bg}
+            fill
+            loading="lazy"
+            className="object-cover brightness-75"
+          />
+        </div>
+      </body>
     </html>
   );
 }
