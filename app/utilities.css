@@ -1,0 +1,41 @@
+@utility flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+@utility pointer-clickable {
+  cursor: pointer;
+}
+
+@utility panel {
+  min-width: 26.875rem;
+  min-height: 33.9375rem;
+  background-color: rgba(46, 49, 52, 0.6);
+  border-radius: 12px;
+}
+
+@utility btn {
+  cursor: pointer;
+  transform: translateY(0);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  touch-action: manipulation;
+
+  &:hover {
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  }
+}
+
+@utility btn-numbers {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-secondary);
+  border-radius: 20px;
+}
