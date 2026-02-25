@@ -1,0 +1,9 @@
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.js' '*.jsx' '*.ts' '*.tsx')
+
+if [ -z "$staged_files" ]; then
+  echo "No staged JS/TS files to lint."
+  exit 0
+fi
+
+echo "Linting staged files..."
+npm run lint -- $staged_files
