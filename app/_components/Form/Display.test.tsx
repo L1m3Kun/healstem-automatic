@@ -8,17 +8,17 @@ afterEach(() => {
   cleanup();
 });
 
-import { MemoizedDisplay } from "./Display";
+import { Display } from "./Display";
 
-describe("MemoizedDisplay", () => {
+describe("Display", () => {
   it("renders lastPhone text", () => {
-    render(<MemoizedDisplay lastPhone="6498" />);
+    render(<Display lastPhone="6498" />);
 
     expect(screen.getByText("6498")).toBeInTheDocument();
   });
 
   it("keeps error message hidden by default", () => {
-    render(<MemoizedDisplay lastPhone="" />);
+    render(<Display lastPhone="" />);
 
     const errorMessage = screen.getByText("error message!!");
     expect(errorMessage).toHaveClass("invisible");
