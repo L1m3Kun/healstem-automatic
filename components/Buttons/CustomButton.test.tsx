@@ -24,7 +24,7 @@ describe("CustomButton", () => {
 
     render(
       <CustomButton
-        mode="link"
+        mode="default"
         href={"/test" as Route}
         onClick={handleClick}
         type="button"

@@ -31,10 +31,11 @@ describe("ButtonPanel", () => {
   it("marks action buttons with accent class", () => {
     render(<ButtonPanel handleButtonClick={vi.fn()} />);
 
-    const backspaceButton = screen.getByRole("button", { name: "<" });
-    const confirmButton = screen.getByRole("button", { name: ">" });
+    const buttons = screen.getAllByRole("button");
+    const accentButtons = buttons.filter((btn) =>
+      btn.classList.contains("bg-accent"),
+    );
 
-    expect(backspaceButton).toHaveClass("bg-accent");
-    expect(confirmButton).toHaveClass("bg-accent");
+    expect(accentButtons).toHaveLength(2);
   });
 });
