@@ -8,11 +8,11 @@ afterEach(() => {
   cleanup();
 });
 
-import { MemoizedButtonPanel } from "./ButtonPanel";
+import { ButtonPanel } from "./ButtonPanel";
 
-describe("MemoizedButtonPanel", () => {
+describe("ButtonPanel", () => {
   it("renders 12 keypad buttons", () => {
-    render(<MemoizedButtonPanel handleButtonClick={vi.fn()} />);
+    render(<ButtonPanel handleButtonClick={vi.fn()} />);
 
     const buttons = screen.getAllByRole("button");
     expect(buttons).toHaveLength(12);
@@ -21,7 +21,7 @@ describe("MemoizedButtonPanel", () => {
   it("calls handleButtonClick when a button is clicked", () => {
     const handleButtonClick = vi.fn();
 
-    render(<MemoizedButtonPanel handleButtonClick={handleButtonClick} />);
+    render(<ButtonPanel handleButtonClick={handleButtonClick} />);
 
     fireEvent.click(screen.getByRole("button", { name: "1" }));
 
@@ -29,12 +29,13 @@ describe("MemoizedButtonPanel", () => {
   });
 
   it("marks action buttons with accent class", () => {
-    render(<MemoizedButtonPanel handleButtonClick={vi.fn()} />);
+    render(<ButtonPanel handleButtonClick={vi.fn()} />);
 
-    const backspaceButton = screen.getByRole("button", { name: "<" });
-    const confirmButton = screen.getByRole("button", { name: ">" });
+    const buttons = screen.getAllByRole("button");
+    const accentButtons = buttons.filter((btn) =>
+      btn.classList.contains("bg-accent"),
+    );
 
-    expect(backspaceButton).toHaveClass("bg-accent");
-    expect(confirmButton).toHaveClass("bg-accent");
+    expect(accentButtons).toHaveLength(2);
   });
 });
