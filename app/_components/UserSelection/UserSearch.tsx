@@ -8,7 +8,7 @@ import { useModal, userSelectDialogKey } from "@/contexts/Modals";
 
 import { Display } from "../Form";
 import { UserOptionList } from "./UserOptionList";
-import { InlineSpinner } from "@/components/LoadingSpinner";
+// import { InlineSpinner } from "@/components/LoadingSpinner";
 
 interface UserSelectionProps {
   lastPhone: string;
@@ -86,7 +86,8 @@ export const UserSearch = ({
         <CircleX fill="#c86a3a" stroke="#ede7de" className="w-full h-full" />
       </div>
       {isLoading ? (
-        <InlineSpinner />
+        // <InlineSpinner />
+        <div />
       ) : (
         <>
           <div className="w-full h-full flex-center justify-between items-start">
