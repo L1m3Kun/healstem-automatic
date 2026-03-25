@@ -1,13 +1,14 @@
 "use client";
 
 import { ChevronLeftCircle, ChevronRightCircle, CircleX } from "lucide-react";
-import type { User } from "@/types/User";
-import { useModal } from "@/contexts/Modals";
-import { userSelectDialogKey } from "@/contexts/Modals";
+import { type MouseEvent, useState } from "react";
+
+import type { User } from "@/types";
+import { useModal, userSelectDialogKey } from "@/contexts/Modals";
+
 import { Display } from "../Form";
 import { UserOptionList } from "./UserOptionList";
-import type { MouseEvent } from "react";
-import { useState } from "react";
+// import { InlineSpinner } from "@/components/LoadingSpinner";
 
 interface UserSelectionProps {
   lastPhone: string;
@@ -21,26 +22,51 @@ export const UserSearch = ({
   onClose,
 }: UserSelectionProps) => {
   const [companion, setCompanion] = useState<number>(1);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dialog = useModal();
+
+  const logging = async (
+    userId: number | string,
+    checkedPeopleCount: number,
+  ) => {
+    const params = {
+      userId,
+      checkInDate: new Date(Date.now()),
+      checkedPeopleCount,
+    };
+
+    return fetch("/api/v1/log", {
+      method: "POST",
+      body: JSON.stringify(params),
+    });
+  };
 
   const onConfirm = () => {
     dialog.close(userSelectDialogKey);
   };
 
-  const selectUser = (username: string) => {
-    dialog.open({
-      key: userSelectDialogKey,
-      children: (
-        <Dialog
-          name={username}
-          companion={companion}
-          onConfirm={onConfirm}
-          onClose={() => dialog.close(userSelectDialogKey)}
-        />
-      ),
-    });
-    onClose();
+  const selectUser = (user: User) => {
+    // @TODO : log 요청
+    try {
+      setIsLoading(true);
+      logging(user.id, companion);
+      dialog.open({
+        key: userSelectDialogKey,
+        children: (
+          <Dialog
+            name={user.name}
+            companion={companion}
+            onConfirm={onConfirm}
+            onClose={() => dialog.close(userSelectDialogKey)}
+          />
+        ),
+      });
+      onClose();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const increaseCompanion = () => {
@@ -59,25 +85,32 @@ export const UserSearch = ({
       >
         <CircleX fill="#c86a3a" stroke="#ede7de" className="w-full h-full" />
       </div>
-      <div className="w-full h-full flex-center justify-between items-start">
-        <div>
-          <h2 className="text-2xl mb-1">전화번호 뒷 자리</h2>
-          <Display lastPhone={lastPhone} />
-        </div>
-        <div className="w-full h-full">
-          <h2 className="text-2xl mb-1">인원 선택</h2>
-          <div className="flex-center gap-3 w-full h-full min-h-14">
-            <button onClick={decreaseCompanion}>
-              <ChevronLeftCircle />
-            </button>
-            <p className="text-3xl w-12">{companion}</p>
-            <button onClick={increaseCompanion}>
-              <ChevronRightCircle />
-            </button>
+      {isLoading ? (
+        // <InlineSpinner />
+        <div />
+      ) : (
+        <>
+          <div className="w-full h-full flex-center justify-between items-start">
+            <div>
+              <h2 className="text-2xl mb-1">전화번호 뒷 자리</h2>
+              <Display lastPhone={lastPhone} />
+            </div>
+            <div className="w-full h-full">
+              <h2 className="text-2xl mb-1">인원 선택</h2>
+              <div className="flex-center gap-3 w-full h-full min-h-14">
+                <button onClick={decreaseCompanion}>
+                  <ChevronLeftCircle />
+                </button>
+                <p className="text-3xl w-12">{companion}</p>
+                <button onClick={increaseCompanion}>
+                  <ChevronRightCircle />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <UserOptionList userList={userList} onSelect={selectUser} />
+          <UserOptionList userList={userList} onSelect={selectUser} />
+        </>
+      )}
     </div>
   );
 };
