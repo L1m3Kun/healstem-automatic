@@ -1,25 +1,22 @@
-import type { User } from "@/types/User";
+import type { User } from "@/types";
 
 interface UserOptionProps {
   user: User;
-  onSelect: (name: string) => void;
+  onSelect: (user: User) => void;
 }
 
-export const UserOption = ({
-  user: { phone, name },
-  onSelect,
-}: UserOptionProps) => {
+export const UserOption = ({ user, onSelect }: UserOptionProps) => {
   return (
     <div
-      key={phone}
+      key={user.id}
       className="flex-center justify-between rounded-2xl bg-secondary w-full h-full text-bg-soft py-3 px-8"
     >
       <p className="text-2xl">
-        {name} ({phone})
+        {user.name} ({user.phone})
       </p>
       <button
         className="btn text-xl rounded-3xl bg-accent w-20 h-10"
-        onClick={() => onSelect(name)}
+        onClick={() => onSelect(user)}
       >
         선택
       </button>

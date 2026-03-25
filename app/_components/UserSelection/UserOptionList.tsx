@@ -1,11 +1,11 @@
 import { ChevronsDown } from "lucide-react";
-import type { User } from "@/types/User";
+import type { User } from "@/types";
 import { UserOption } from "./UserOption";
 import { useCheckOverflowContents } from "@/hooks";
 
 interface UserOptionListProps {
   userList: User[];
-  onSelect: (name: string) => void;
+  onSelect: (user: User) => void;
 }
 
 export const UserOptionList = ({ userList, onSelect }: UserOptionListProps) => {
@@ -17,7 +17,7 @@ export const UserOptionList = ({ userList, onSelect }: UserOptionListProps) => {
       ref={userListRef}
     >
       {userList.map((user) => (
-        <UserOption key={user.phone} user={user} onSelect={onSelect} />
+        <UserOption key={user.id} user={user} onSelect={onSelect} />
       ))}
       {isOverflowing && (
         <ChevronsDown
