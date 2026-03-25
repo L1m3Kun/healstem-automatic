@@ -9,14 +9,48 @@ import { ButtonPanel } from "./ButtonPanel";
 import { UserSearch } from "../UserSelection/UserSearch";
 
 const TestUserData: User[] = [
-  { name: "test1", phone: "010-1***-6666" },
-  { name: "test2", phone: "010-2***-6666" },
-  { name: "test3", phone: "010-3***-6666" },
-  { name: "test4", phone: "010-4***-6666" },
-  { name: "test5", phone: "010-5***-6666" },
-  { name: "test6", phone: "010-6***-6666" },
-  { name: "test7", phone: "010-7***-6666" },
-  { name: "test8", phone: "010-8***-6666" },
+  {
+    name: "test1",
+    phone: "010-1***-6666",
+    gender: "남",
+    id: 1,
+    membership: "회권",
+  },
+  {
+    name: "test1",
+    phone: "010-2***-6666",
+    gender: "남",
+    id: 2,
+    membership: "회권",
+  },
+  {
+    name: "test1",
+    phone: "010-3***-6666",
+    gender: "남",
+    id: 3,
+    membership: "회권",
+  },
+  {
+    name: "test1",
+    phone: "010-4***-6666",
+    gender: "남",
+    id: 4,
+    membership: "회권",
+  },
+  {
+    name: "test1",
+    phone: "010-5***-6666",
+    gender: "남",
+    id: 5,
+    membership: "회권",
+  },
+  {
+    name: "test1",
+    phone: "010-6***-6666",
+    gender: "남",
+    id: 6,
+    membership: "회권",
+  },
 ];
 
 export const Form = () => {
