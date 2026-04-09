@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getAllUsers, withApiSecurity } from "@/lib/api";
+import { getAllUsers, withApiSecurity } from "@/lib/api/server";
 import type { User, UserInput } from "@/types";
 
 // ─── POST /api/v1 ────────────────────────────────────────────────────────

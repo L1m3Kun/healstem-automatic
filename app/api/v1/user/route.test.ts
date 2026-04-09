@@ -9,7 +9,7 @@ vi.mock("@/lib/api", () => ({
   getAllUsers: vi.fn(),
 }));
 
-import { getAllUsers } from "@/lib/api";
+import { getAllUsers } from "@/lib/api/server";
 import { POST } from "./route";
 
 const mockGetAllUsers = vi.mocked(getAllUsers);
