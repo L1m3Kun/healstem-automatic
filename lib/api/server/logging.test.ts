@@ -20,7 +20,7 @@ describe("logEntrances", () => {
       {
         method: "POST",
         body: JSON.stringify({ userId, checkInDate, checkedPeopleCount }),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain" },
       },
     );
   });

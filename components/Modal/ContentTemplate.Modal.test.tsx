@@ -64,6 +64,20 @@ describe("ContentTemplateModal — alert mode", () => {
 
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
+
+  it("onConfirm이 전달되지 않으면 확인 버튼 클릭 시 아무 일도 일어나지 않는다", () => {
+    render(<ContentTemplateModal mode="alert" />);
+    expect(() =>
+      fireEvent.click(screen.getByRole("button", { name: "확인" })),
+    ).not.toThrow();
+  });
+
+  it("onCancel이 전달되지 않으면 취소 버튼 클릭 시 아무 일도 일어나지 않는다", () => {
+    render(<ContentTemplateModal mode="alert" />);
+    expect(() =>
+      fireEvent.click(screen.getByRole("button", { name: "취소" })),
+    ).not.toThrow();
+  });
 });
 
 // ───────────────────────────────────────────────
@@ -119,6 +133,20 @@ describe("ContentTemplateModal — confirm mode", () => {
     fireEvent.click(screen.getByRole("button", { name: "아니오" }));
 
     expect(onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it("onConfirm이 전달되지 않으면 예 버튼 클릭 시 아무 일도 일어나지 않는다", () => {
+    render(<ContentTemplateModal mode="confirm" />);
+    expect(() =>
+      fireEvent.click(screen.getByRole("button", { name: "예" })),
+    ).not.toThrow();
+  });
+
+  it("onCancel이 전달되지 않으면 아니오 버튼 클릭 시 아무 일도 일어나지 않는다", () => {
+    render(<ContentTemplateModal mode="confirm" />);
+    expect(() =>
+      fireEvent.click(screen.getByRole("button", { name: "아니오" })),
+    ).not.toThrow();
   });
 });
 

@@ -3,13 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { User } from "@/types";
 
-vi.mock("@/lib/api", () => ({
+vi.mock("@/lib/api/server", () => ({
   withApiSecurity: (handler: (req: NextRequest) => Promise<Response>) =>
     handler,
   getAllUsers: vi.fn(),
 }));
 
-import { getAllUsers } from "@/lib/api";
+import { getAllUsers } from "@/lib/api/server";
 import { POST } from "./route";
 
 const mockGetAllUsers = vi.mocked(getAllUsers);

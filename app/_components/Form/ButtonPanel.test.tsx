@@ -11,7 +11,7 @@ afterEach(() => {
 import { ButtonPanel } from "./ButtonPanel";
 
 describe("ButtonPanel", () => {
-  it("renders 12 keypad buttons", () => {
+  it("0~9, reset, 12개의 버튼이 렌더링된다.", () => {
     render(<ButtonPanel handleButtonClick={vi.fn()} />);
 
     const buttons = screen.getAllByRole("button");

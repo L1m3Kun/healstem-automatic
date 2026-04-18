@@ -10,6 +10,7 @@ interface AlertModalProps extends ModalProps {
   AlertTitle?: string;
 }
 
+// @TODO : onCancel, onConfirm에 아무것도 전달안될때 에러처리
 const AlertModal = ({
   children,
   AlertTitle = "주의",

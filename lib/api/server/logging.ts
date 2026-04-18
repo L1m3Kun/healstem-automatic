@@ -12,7 +12,7 @@ export const logEntrances = (
     checkedPeopleCount,
   };
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
+    "Content-Type": "text/plain",
   };
   return fetchWithGAS(query, {
     method: "POST",

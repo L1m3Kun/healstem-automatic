@@ -5,10 +5,11 @@ import { type MouseEvent, useState } from "react";
 
 import type { User } from "@/types";
 import { useModal, userSelectDialogKey } from "@/contexts/Modals";
+import { writeLog } from "@/lib/api/client";
 
 import { Display } from "../Form";
 import { UserOptionList } from "./UserOptionList";
-// import { InlineSpinner } from "@/components/LoadingSpinner";
+import { InlineSpinner } from "@/components/LoadingSpinner";
 
 interface UserSelectionProps {
   lastPhone: string;
@@ -25,31 +26,14 @@ export const UserSearch = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dialog = useModal();
 
-  const logging = async (
-    userId: number | string,
-    checkedPeopleCount: number,
-  ) => {
-    const params = {
-      userId,
-      checkInDate: new Date(Date.now()),
-      checkedPeopleCount,
-    };
-
-    return fetch("/api/v1/log", {
-      method: "POST",
-      body: JSON.stringify(params),
-    });
-  };
-
   const onConfirm = () => {
     dialog.close(userSelectDialogKey);
   };
 
   const selectUser = (user: User) => {
-    // @TODO : log 요청
     try {
       setIsLoading(true);
-      logging(user.id, companion);
+      writeLog(user.id, companion);
       dialog.open({
         key: userSelectDialogKey,
         children: (
@@ -86,8 +70,7 @@ export const UserSearch = ({
         <CircleX fill="#c86a3a" stroke="#ede7de" className="w-full h-full" />
       </div>
       {isLoading ? (
-        // <InlineSpinner />
-        <div />
+        <InlineSpinner />
       ) : (
         <>
           <div className="w-full h-full flex-center justify-between items-start">

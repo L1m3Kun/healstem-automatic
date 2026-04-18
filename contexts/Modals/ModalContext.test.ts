@@ -1,10 +1,17 @@
 /* @vitest-environment jsdom */
 
 import "@testing-library/jest-dom/vitest";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
-import React, { useContext } from "react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
+import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ModalProvider, _ModalContext } from "./ModalContext";
+import { ModalProvider } from "./ModalContext";
+import { useModal } from "./useModal";
 
 afterEach(() => {
   cleanup();
@@ -12,8 +19,14 @@ afterEach(() => {
 
 // ── 테스트용 헬퍼 컴포넌트 (React.createElement 사용) ──
 
-const ModalOpener = ({ modalKey, label }: { modalKey: string; label: string }) => {
-  const { open } = useContext(_ModalContext);
+const ModalOpener = ({
+  modalKey,
+  label,
+}: {
+  modalKey: string;
+  label: string;
+}) => {
+  const { open } = useModal();
   return React.createElement(
     "button",
     {
@@ -28,7 +41,7 @@ const ModalOpener = ({ modalKey, label }: { modalKey: string; label: string }) =
 };
 
 const ModalCloser = ({ modalKey }: { modalKey: string }) => {
-  const { close } = useContext(_ModalContext);
+  const { close } = useModal();
   return React.createElement(
     "button",
     { onClick: () => close(modalKey) },
@@ -56,7 +69,10 @@ describe("ModalProvider", () => {
       React.createElement(
         ModalProvider,
         null,
-        React.createElement(ModalOpener, { modalKey: "m1", label: "모달 내용" }),
+        React.createElement(ModalOpener, {
+          modalKey: "m1",
+          label: "모달 내용",
+        }),
       ),
     );
 
@@ -74,7 +90,10 @@ describe("ModalProvider", () => {
       React.createElement(
         ModalProvider,
         null,
-        React.createElement(ModalOpener, { modalKey: "m2", label: "중복 모달" }),
+        React.createElement(ModalOpener, {
+          modalKey: "m2",
+          label: "중복 모달",
+        }),
       ),
     );
 
@@ -96,7 +115,10 @@ describe("ModalProvider", () => {
       React.createElement(
         ModalProvider,
         null,
-        React.createElement(ModalOpener, { modalKey: "m3", label: "닫힐 모달" }),
+        React.createElement(ModalOpener, {
+          modalKey: "m3",
+          label: "닫힐 모달",
+        }),
         React.createElement(ModalCloser, { modalKey: "m3" }),
       ),
     );
@@ -119,7 +141,10 @@ describe("ModalProvider", () => {
       React.createElement(
         ModalProvider,
         null,
-        React.createElement(ModalOpener, { modalKey: "m4", label: "배경 클릭 모달" }),
+        React.createElement(ModalOpener, {
+          modalKey: "m4",
+          label: "배경 클릭 모달",
+        }),
       ),
     );
 
