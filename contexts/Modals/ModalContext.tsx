@@ -17,11 +17,7 @@ type ModalContextType = {
   modalStates: ModalStateType[];
 };
 
-export const _ModalContext = createContext<ModalContextType>({
-  open: () => {},
-  close: () => {},
-  modalStates: [],
-});
+export const _ModalContext = createContext<ModalContextType | null>(null);
 
 interface ModalBackgroundProps extends PropsWithChildren {
   onClose: () => void;

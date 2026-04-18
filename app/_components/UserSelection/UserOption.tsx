@@ -7,10 +7,7 @@ interface UserOptionProps {
 
 export const UserOption = ({ user, onSelect }: UserOptionProps) => {
   return (
-    <div
-      key={user.id}
-      className="flex-center justify-between rounded-2xl bg-secondary w-full h-full text-bg-soft py-3 px-8"
-    >
+    <div className="flex-center justify-between rounded-2xl bg-secondary w-full h-full text-bg-soft py-3 px-8">
       <p className="text-2xl">
         {user.name} ({user.phone})
       </p>
