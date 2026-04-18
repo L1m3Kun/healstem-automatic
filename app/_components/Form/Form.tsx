@@ -1,64 +1,22 @@
 "use client";
-import type { MouseEvent, SubmitEvent } from "react";
-import { useState } from "react";
+import { type MouseEvent, type SubmitEvent, useState } from "react";
+
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useModal, userSearchModalKey } from "@/contexts/Modals";
-import type { User } from "@/types/User";
 import { cn } from "@/utilities";
+
+import { UserSearch } from "../UserSelection";
 import { Display } from "./Display";
 import { ButtonPanel } from "./ButtonPanel";
-import { UserSearch } from "../UserSelection/UserSearch";
-
-const TestUserData: User[] = [
-  {
-    name: "test1",
-    phone: "010-1***-6666",
-    gender: "남",
-    id: 1,
-    membership: "회권",
-  },
-  {
-    name: "test1",
-    phone: "010-2***-6666",
-    gender: "남",
-    id: 2,
-    membership: "회권",
-  },
-  {
-    name: "test1",
-    phone: "010-3***-6666",
-    gender: "남",
-    id: 3,
-    membership: "회권",
-  },
-  {
-    name: "test1",
-    phone: "010-4***-6666",
-    gender: "남",
-    id: 4,
-    membership: "회권",
-  },
-  {
-    name: "test1",
-    phone: "010-5***-6666",
-    gender: "남",
-    id: 5,
-    membership: "회권",
-  },
-  {
-    name: "test1",
-    phone: "010-6***-6666",
-    gender: "남",
-    id: 6,
-    membership: "회권",
-  },
-];
+import { getUser } from "@/lib/api/client";
 
 export const Form = () => {
   const [lastPhone, setLastPhone] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const userSelectionModal = useModal();
 
-  const onSumbit = (event: SubmitEvent<HTMLFormElement>) => {
+  const onSumbit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!/^\d{4}$/.exec(lastPhone)) {
       console.warn(`lastphone is must be 4, lastPhoen: ${lastPhone}`);
@@ -67,16 +25,34 @@ export const Form = () => {
     }
 
     setErrorMessage("");
-    userSelectionModal.open({
-      key: userSearchModalKey,
-      children: (
-        <UserSearch
-          lastPhone={lastPhone}
-          userList={TestUserData}
-          onClose={() => userSelectionModal.close(userSearchModalKey)}
-        />
-      ),
-    });
+    try {
+      setIsLoading(true);
+      const { data: userList, message } = await getUser(lastPhone);
+      if (!userList) {
+        setErrorMessage("다시 시도해주세요.");
+        console.error(message);
+        return;
+      }
+      // @TODO : loading, error 처리
+      if (userList.length < 1) {
+        setErrorMessage("유저를 찾을 수 없습니다.");
+      } else {
+        userSelectionModal.open({
+          key: userSearchModalKey,
+          children: (
+            <UserSearch
+              lastPhone={lastPhone}
+              userList={userList}
+              onClose={() => userSelectionModal.close(userSearchModalKey)}
+            />
+          ),
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
     return;
   };
 
@@ -100,17 +76,21 @@ export const Form = () => {
   };
 
   return (
-    <form onSubmit={onSumbit}>
-      <Display lastPhone={lastPhone} />
-      <p
-        className={cn(
-          "text-sm my-3 text-red-400 min-h-5",
-          !!errorMessage ? "visible" : "invisible",
-        )}
-      >
-        {errorMessage}
-      </p>
-      <ButtonPanel handleButtonClick={onButtonClick} />
-    </form>
+    <>
+      <form aria-label="form" onSubmit={onSumbit}>
+        <Display lastPhone={lastPhone} />
+        <p
+          data-testid="error-message"
+          className={cn(
+            "text-sm my-3 text-red-400 min-h-5",
+            !!errorMessage ? "visible" : "invisible",
+          )}
+        >
+          {errorMessage}
+        </p>
+        <ButtonPanel handleButtonClick={onButtonClick} />
+      </form>
+      {isLoading && <LoadingSpinner />}
+    </>
   );
 };
