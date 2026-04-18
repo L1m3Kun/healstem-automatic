@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { User } from "@/types";
 
-vi.mock("@/lib/api", () => ({
+vi.mock("@/lib/api/server", () => ({
   withApiSecurity: (handler: (req: NextRequest) => Promise<Response>) =>
     handler,
   getAllUsers: vi.fn(),

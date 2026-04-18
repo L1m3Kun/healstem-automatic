@@ -1,13 +1,13 @@
 import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/api", () => ({
+vi.mock("@/lib/api/server", () => ({
   withApiSecurity: (handler: (req: NextRequest) => Promise<Response>) =>
     handler,
   logEntrances: vi.fn(),
 }));
 
-import { logEntrances } from "@/lib/api";
+import { logEntrances } from "@/lib/api/server";
 import { POST } from "./route";
 
 const mockLogEntrances = vi.mocked(logEntrances);
@@ -36,9 +36,7 @@ describe("POST /api/v1/log", () => {
   });
 
   it("체크인 성공 시 201을 반환한다", async () => {
-    mockLogEntrances.mockResolvedValue(
-      mockGASResponse(201, "logged", null),
-    );
+    mockLogEntrances.mockResolvedValue(mockGASResponse(201, "logged", null));
 
     const res = await POST(createRequest(validBody));
     expect(res.status).toBe(201);
@@ -63,18 +61,14 @@ describe("POST /api/v1/log", () => {
   });
 
   it("정의되지 않은 state이면 500으로 응답한다", async () => {
-    mockLogEntrances.mockResolvedValue(
-      mockGASResponse(999, "Unknown", null),
-    );
+    mockLogEntrances.mockResolvedValue(mockGASResponse(999, "Unknown", null));
 
     const res = await POST(createRequest(validBody));
     expect(res.status).toBe(500);
   });
 
   it("logEntrances에 올바른 파라미터를 전달한다", async () => {
-    mockLogEntrances.mockResolvedValue(
-      mockGASResponse(201, "logged", null),
-    );
+    mockLogEntrances.mockResolvedValue(mockGASResponse(201, "logged", null));
 
     await POST(createRequest(validBody));
 
