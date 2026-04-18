@@ -90,20 +90,26 @@ describe("checkRateLimit", () => {
 
   it("60번째 요청(한도 이내)은 true를 반환한다.", () => {
     const ip = "rl-within-limit";
-    for (let i = 0; i < 59; i++) checkRateLimit(ip);
+    for (let i = 0; i < 59; i++) {
+      checkRateLimit(ip);
+    }
     expect(checkRateLimit(ip)).toBe(true);
   });
 
   it("61번째 요청(한도 초과)은 false를 반환한다.", () => {
     const ip = "rl-exceed-limit";
-    for (let i = 0; i < 60; i++) checkRateLimit(ip);
+    for (let i = 0; i < 60; i++) {
+      checkRateLimit(ip);
+    }
     expect(checkRateLimit(ip)).toBe(false);
   });
 
   it("1분 윈도우 초과 시 카운트가 초기화되어 true를 반환한다.", () => {
     vi.useFakeTimers();
     const ip = "rl-window-reset";
-    for (let i = 0; i < 60; i++) checkRateLimit(ip); // 한도 도달
+    for (let i = 0; i < 60; i++) {
+      checkRateLimit(ip);
+    } // 한도 도달
     vi.advanceTimersByTime(60_001);
     expect(checkRateLimit(ip)).toBe(true);
   });
@@ -210,7 +216,9 @@ describe("withApiSecurity", () => {
 
   it("Rate limit 초과 시 핸들러를 실행하지 않고 429를 반환한다.", async () => {
     const ip = "sec-429-ip";
-    for (let i = 0; i < 60; i++) checkRateLimit(ip); // 한도 소진
+    for (let i = 0; i < 60; i++) {
+      checkRateLimit(ip);
+    } // 한도 소진
     const handler = vi.fn().mockResolvedValue(NextResponse.json({}));
     const req = new NextRequest("http://localhost/api/test", {
       method: "POST",
