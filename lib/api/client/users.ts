@@ -1,6 +1,7 @@
 import type { APIResponseContainer, User } from "@/types";
 
 const ABORT_TIMEOUT_MS = 5000;
+
 export const getUser = async (
   lastPhone: string,
   retryCount = 1,
@@ -19,8 +20,9 @@ export const getUser = async (
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
-    const { data } = await response.json();
-    return data;
+    const data = await response.json();
+
+    return data as APIResponseContainer<User[]>;
   } catch (error) {
     clearTimeout(timeoutId);
     if (retryCount > 0) {
