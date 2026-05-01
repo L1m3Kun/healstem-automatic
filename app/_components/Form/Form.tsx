@@ -9,6 +9,7 @@ import { UserSearch } from "../UserSelection";
 import { Display } from "./Display";
 import { ButtonPanel } from "./ButtonPanel";
 import { getUser } from "@/lib/api/client";
+import { CUSTOM_STATUS_CODE } from "@/lib/api/server";
 
 export const Form = () => {
   const [lastPhone, setLastPhone] = useState<string>("");
@@ -27,27 +28,29 @@ export const Form = () => {
     setErrorMessage("");
     try {
       setIsLoading(true);
-      const { data: userList, message } = await getUser(lastPhone);
+      const { data: userList, message, status } = await getUser(lastPhone);
+
+      if (status === CUSTOM_STATUS_CODE.user_not_fond) {
+        setErrorMessage("유저를 찾을 수 없습니다.");
+        return;
+      }
       if (!userList) {
         setErrorMessage("다시 시도해주세요.");
         console.error(message);
         return;
       }
       // @TODO : loading, error 처리
-      if (userList.length < 1) {
-        setErrorMessage("유저를 찾을 수 없습니다.");
-      } else {
-        userSelectionModal.open({
-          key: userSearchModalKey,
-          children: (
-            <UserSearch
-              lastPhone={lastPhone}
-              userList={userList}
-              onClose={() => userSelectionModal.close(userSearchModalKey)}
-            />
-          ),
-        });
-      }
+      setLastPhone("");
+      userSelectionModal.open({
+        key: userSearchModalKey,
+        children: (
+          <UserSearch
+            lastPhone={lastPhone}
+            userList={userList}
+            onClose={() => userSelectionModal.close(userSearchModalKey)}
+          />
+        ),
+      });
     } catch (e) {
       console.error(e);
     } finally {
@@ -57,18 +60,25 @@ export const Form = () => {
   };
 
   const onButtonClick = (event: MouseEvent<Element>) => {
-    const target = event.target as HTMLButtonElement;
+    const target = (event.target as Element).closest<HTMLButtonElement>(
+      "button",
+    );
+
     if (!target || !target.dataset.value) {
       return;
     }
 
     const { value } = target.dataset;
-
+    setErrorMessage("");
     if (value === "bs") {
       setLastPhone((prev) => prev.slice(0, Math.max(prev.length - 1, 0)));
       return;
     }
     if (/^[0-9]$/.exec(value)) {
+      if (lastPhone.length > 3) {
+        setErrorMessage("최대 4자리까지 입력 가능합니다.");
+        return;
+      }
       setLastPhone((prev) => prev + value);
       return;
     }
@@ -82,7 +92,7 @@ export const Form = () => {
         <p
           data-testid="error-message"
           className={cn(
-            "text-sm my-3 text-red-400 min-h-5",
+            "text-xs lg:text-sm my-3 text-red-400 min-h-2 lg:min-h-5",
             !!errorMessage ? "visible" : "invisible",
           )}
         >
