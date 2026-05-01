@@ -4,7 +4,7 @@ import type { ButtonHTMLAttributes } from "react";
 
 interface CustomButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   mode: "link" | "default";
-  href: Route;
+  href?: Route;
 }
 
 export const CustomButton = ({
@@ -15,6 +15,9 @@ export const CustomButton = ({
 }: CustomButtonProps) => {
   switch (mode) {
     case "link":
+      if (!href) {
+        throw new Error("href can't be undefined with button link mode.");
+      }
       return <Link href={href}>{children}</Link>;
     default:
       return <button {...rest}>{children}</button>;
