@@ -42,7 +42,7 @@ const ButtonPanel = ({ handleButtonClick }: ButtonPanelProps) => {
   return (
     <div
       onClick={handleButtonClick}
-      className="grid grid-cols-[repeat(3,100px)] gap-4 w-full justify-center max-h-75 h-full"
+      className="grid grid-cols-[repeat(3,60px)] lg:grid-cols-[repeat(3,100px)] gap-3 lg:gap-4 w-full justify-center lg:max-h-75 h-full"
     >
       {ButtonItems.map(({ contents, value, id, ...rest }) => (
         <button

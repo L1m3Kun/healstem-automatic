@@ -10,17 +10,24 @@
 }
 
 @utility panel {
-  min-width: 26.875rem;
-  min-height: 33.9375rem;
+  min-width: 10rem;
+  min-height: 30rem;
   background-color: rgba(46, 49, 52, 0.6);
   border-radius: 12px;
+
+  @media (width >= 1024px) {
+    min-width: 26.875rem;
+    min-height: 33.9375rem;
+  }
 }
 
 @utility btn {
   cursor: pointer;
   transform: translateY(0);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
   touch-action: manipulation;
 
   &:hover {

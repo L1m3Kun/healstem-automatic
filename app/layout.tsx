@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Image from "next/image";
-import Bg from "@/assets/imgs/background-img.jpg";
 import { ModalProvider } from "@/contexts/Modals/ModalContext";
 import "./globals.css";
 
@@ -23,17 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${FontJalnan.className} h-full`}>
+      <body className={`${FontJalnan.className}`}>
         <ModalProvider>{children}</ModalProvider>
-        <div className="fixed inset-0 -z-40">
-          <Image
-            alt="사우나 배경"
-            src={Bg}
-            fill
-            loading="lazy"
-            className="object-cover brightness-75"
-          />
-        </div>
       </body>
     </html>
   );
