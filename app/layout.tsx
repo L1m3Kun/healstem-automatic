@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ModalProvider } from "@/contexts/Modals/ModalContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={FontJalnan.className}>{children}</body>
+      <body className={`${FontJalnan.className}`}>
+        <ModalProvider>{children}</ModalProvider>
+      </body>
     </html>
   );
 }
