@@ -28,4 +28,4 @@ const BackGroundModal = ({
   );
 };
 
-export default BackGroundModal;
+export { BackGroundModal };

@@ -1,6 +1,6 @@
 import { CustomButton } from "../Buttons";
 import type { ErrorModalProps } from "@/hooks/Modals/useErrorModal";
-import BackGroundModal from "./BackGround.Modal";
+import { BackGroundModal } from "./BackGround.Modal";
 import { MessageCircleWarningIcon } from "lucide-react";
 
 interface ErrorModalContentProps extends ErrorModalProps {

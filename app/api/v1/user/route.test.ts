@@ -1,43 +1,34 @@
 import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { User } from "@/types";
-
 vi.mock("@/lib/api/server", () => ({
   withApiSecurity: (handler: (req: NextRequest) => Promise<Response>) =>
     handler,
   getAllUsers: vi.fn(),
+  CUSTOM_STATUS_CODE: {
+    user_not_fond: 1001,
+    fail_to_log: 1002,
+    user_expired: 1003,
+    db_not_connected: 1004,
+  },
+  DEFAULT_STATUS_CODE: {
+    ok: 200,
+    created: 201,
+    no_content: 204,
+    bad_request: 400,
+    unauthorized: 401,
+    interval_server_error: 500,
+  },
 }));
 
 import { getAllUsers } from "@/lib/api/server";
 import { POST } from "./route";
+import { MockUsers } from "@/test/mocks/users";
 
 const mockGetAllUsers = vi.mocked(getAllUsers);
 
 /** 각 테스트에서 독립된 User 객체를 생성 (route 내부에서 phone 필드를 직접 변형하기 때문) */
-const createMockUsers = (): User[] => [
-  {
-    id: 1,
-    name: "홍길동",
-    gender: "남",
-    phone: "010-1234-5678",
-    membership: "1개월권",
-  },
-  {
-    id: 2,
-    name: "김철수",
-    gender: "남",
-    phone: "010-9999-5678",
-    membership: "3개월권",
-  },
-  {
-    id: 3,
-    name: "이영희",
-    gender: "여",
-    phone: "010-1234-9999",
-    membership: "6개월권",
-  },
-];
+const createMockUsers = () => MockUsers.map((u) => ({ ...u }));
 
 function createRequest(body: object): NextRequest {
   return new NextRequest("http://localhost/api/v1/user", {
@@ -47,8 +38,8 @@ function createRequest(body: object): NextRequest {
   });
 }
 
-function mockGASResponse(state: number, message: string, data: unknown) {
-  return { json: async () => ({ state, message, data }) } as Response;
+function mockGASResponse(status: number, message: string, data: unknown) {
+  return { json: async () => ({ status, message, data }) } as Response;
 }
 
 describe("POST /api/v1/user", () => {
@@ -78,10 +69,10 @@ describe("POST /api/v1/user", () => {
     const res = await POST(createRequest({ phone: "5678" }));
     const json = await res.json();
 
-    // 010-1234-5678 → 010-1***-5678
+    // 010-1***-5678 → 010-1***-5678 (already masked, idempotent)
     expect(json.data[0].phone).toBe("010-1***-5678");
-    // 010-9999-5678 → 010-9***-5678
-    expect(json.data[1].phone).toBe("010-9***-5678");
+    // 010-2***-5678 → 010-2***-5678 (already masked, idempotent)
+    expect(json.data[1].phone).toBe("010-2***-5678");
   });
 
   it("일치하는 유저가 없을 때 빈 배열과 안내 메시지를 반환한다", async () => {
@@ -92,7 +83,7 @@ describe("POST /api/v1/user", () => {
     const res = await POST(createRequest({ phone: "0000" }));
     const json = await res.json();
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(400);
     expect(json.data).toHaveLength(0);
     expect(json.message).toBe("유저를 찾을 수 없습니다.");
   });

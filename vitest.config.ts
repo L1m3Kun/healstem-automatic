@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     coverage: {
+      reportsDirectory: "test/coverage",
       provider: "v8",
       reporter: ["text", "html", "lcov"], // text: 터미널, html: 브라우저
       include: [
@@ -26,8 +27,8 @@ export default defineConfig({
       ],
       thresholds: {
         // 이 수치 미달 시 CI에서 실패처리 (선택)
-        lines: 70,
-        functions: 70,
+        lines: 80,
+        functions: 80,
       },
     },
   },
